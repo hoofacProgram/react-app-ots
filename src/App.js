@@ -3,13 +3,19 @@ import './App.css';
 
 const Header = (props) => {
   return <header>
-    <h1><a href='/'>{props.title}</a></h1>
+    <h1><a href='/' onClick={(event) => {
+      event.preventDefault()
+      props.onEvent() // 이벤트 이름은 통일만 되면 사용 가능
+    }}>{props.title}</a></h1>
   </header>
 }
 
 const Nav = (props) => {
   const lis = props.topics.map(t => 
-    <li key={t.id}><a href={`/read/${t.id}`}>{t.title}</a></li>
+    <li key={t.id}><a id={t.id} href={`/read/${t.id}`} onClick={(event) => {
+      event.preventDefault()
+      props.onEvent(event.target.id)  // 이벤트 발생 타겟, 현재는 a 태그의 id
+    }}>{t.title}</a></li>
   )
   return <ol>
     {lis}
@@ -31,8 +37,12 @@ function App() {
   ]
   return (
     <div>
-      <Header title='Web'></Header>
-      <Nav topics={topics}></Nav>
+      <Header title='Web' onEvent={() => {
+        alert('Herder Click')
+      }}></Header>
+      <Nav topics={topics} onEvent={(id) => {
+        alert(id)
+      }}></Nav>
       <Article title='Welcome' body='Hello, WEB'></Article>
     </div>
 
