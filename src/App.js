@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
 
 const Header = (props) => {
   return <header>
@@ -30,20 +31,30 @@ const Article = (props) => {
 }
 
 function App() {
+  const [mode, setMode] = useState('WELCOME')
+  const [id, setId] = useState(null)
   const topics = [
     {id:1, title:'html', body:'html is...'},
     {id:2, title:'css', body:'css is...'},
     {id:3, title:'javascript', body:'javascript is...'}
   ]
+  let content = null;
+  if (mode === 'WELCOME') {
+    content = <Article title='Welcome' body='Hello, WEB'></Article>
+  } else if (mode === 'READ') {
+    const topic = topics.filter(e => e.id === Number(id))
+    content = <Article title={topic[0].title} body={topic[0].body}></Article>
+  }
   return (
     <div>
       <Header title='Web' onEvent={() => {
-        alert('Herder Click')
+        setMode('WELCOME')
       }}></Header>
       <Nav topics={topics} onEvent={(id) => {
-        alert(id)
+        setId(id)
+        setMode('READ')
       }}></Nav>
-      <Article title='Welcome' body='Hello, WEB'></Article>
+      {content}
     </div>
 
     );
